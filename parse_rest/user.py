@@ -54,13 +54,11 @@ class User(ParseResource):
     def session_header(self):
         return {'X-Parse-Session-Token': self.sessionToken}
 
-    @login_required
     def save(self, batch=False):
-        session_header = {'X-Parse-Session-Token': self.sessionToken}
         url = self._absolute_url
         data = self._to_native()
 
-        response = User.PUT(url, extra_headers=session_header, batch=batch, **data)
+        response = User.PUT(url, batch=batch, **data)
 
         def call_back(response_dict):
             self.updatedAt = response_dict['updatedAt']
