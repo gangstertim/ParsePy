@@ -136,7 +136,9 @@ class ParseBase(object):
                 404: core.ResourceRequestNotFound
                 }.get(e.code, core.ParseError)
             raise exc(e.read())
-
+        except httplib.BadStatusLine:
+            pass
+ 
         return json.loads(response.read().decode('utf-8'))
 
     @classmethod
