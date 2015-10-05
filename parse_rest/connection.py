@@ -136,9 +136,14 @@ class ParseBase(object):
                 404: core.ResourceRequestNotFound
                 }.get(e.code, core.ParseError)
             raise exc(e.read())
-        except httplib.BadStatusLine:
-            pass
- 
+        except:
+            print 'timeout exceeded, retrying'
+            try:
+                response = urlopen(request, timeout=2*CONNECTION_TIMEOUT)
+            except:
+                print 'timeout exceeded again. shit.'
+                pass
+
         return json.loads(response.read().decode('utf-8'))
 
     @classmethod
